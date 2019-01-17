@@ -1,0 +1,135 @@
+<m-portlet [options]="{headLarge: true}" [loading$]="dataSource.loading$">
+	<!-- start::Header (attributtes: mPortletHeadTitle|mPortletHeadTools) -->
+	<ng-container mPortletHeadTitle>
+		<div class="m-portlet__head-title">
+			<h3 class="m-portlet__head-text">
+				Lista de operaciones
+			</h3>
+		</div>
+	</ng-container>
+	<ng-container mPortletHeadTools>
+		<a [routerLink]="['/inmueble/listar-operacion/agregar']" mat-raised-button color="primary" matTooltip="Crear nueva operación">Nueva operación</a>
+	</ng-container>
+	<!-- end::Header -->
+	<!-- start::Body (attribute: mPortletBody) -->
+	<ng-container mPortletBody>
+		<!-- start::FILTERS & GROUP ACTIONS -->
+		<div class="m-form">
+			<!-- start::FILTERS -->
+			<div class="m-form__filtration">
+				<div class="row align-items-center">
+					<div class="col-md-2 m--margin-bottom-10-mobile">
+<!-- -->
+						<div class="m-form__control">
+							<mat-form-field>
+								<mat-select [(value)]="filterStatus" (selectionChange)="loadOperaciones()" class="mat-form-field mat-form-field-fluid">
+									<mat-option value="">All</mat-option>
+									<mat-option value="0">Selling</mat-option>
+									<mat-option value="1">Sold</mat-option>
+								</mat-select>
+								<mat-hint align="start">
+									<strong>Filter by Status</strong>
+								</mat-hint>
+							</mat-form-field>
+						</div>
+
+					</div>
+					<div class="col-md-2 m--margin-bottom-10-mobile">
+
+						<div class="m-form__control">
+							<mat-form-field>
+								<mat-select [(value)]="filterCondition" (selectionChange)="loadOperaciones()" class="mat-form-field mat-form-field-fluid">
+									<mat-option value="">All</mat-option>
+									<mat-option value="0">New</mat-option>
+									<mat-option value="1">Used</mat-option>
+								</mat-select>
+								<mat-hint align="start">
+									<strong>Filter by Contidion</strong>
+								</mat-hint>
+							</mat-form-field>
+						</div>
+
+						<div class="d-md-none m--margin-bottom-10"></div>
+					</div>
+					<div class="col-md-4 m--margin-bottom-10-mobile">
+						<mat-form-field>
+							<input matInput placeholder="Search product" #searchInput placeholder="Search" class="mat-form-field mat-form-field-fluid">
+							<mat-hint align="start">
+								<strong>Search in all fields</strong>
+							</mat-hint>
+						</mat-form-field>
+					</div>
+				</div>
+			</div>
+			<!-- end::FILTERS -->
+
+			<!-- start::GROUP ACTIONS -->
+			<!-- Group actions list: 'Delete selected' | 'Fetch selected' | 'Update status for selected' -->
+			<!-- Group actions are shared for all LISTS | See '../../_shared' folder -->
+			<div class="row align-items-center collapse m-form__group-actions m--margin-top-20 m--margin-bottom-20">
+				<div class="col-xl-12">
+					<div class="m-form__group m-form__group--inline">
+                    <!--
+						<div class="m-form__label m-form__label-no-wrap">
+							<label class="m--font-bold m--font-danger-">Selected records count: {{ selection.selected.length }}</label>
+						</div>
+                        
+						<div class="m-form__control m-form__group--inline">
+							<button mat-raised-button color="accent" (click)="deleteProducts()" matTooltip="Delete selected products">
+								<mat-icon>delete</mat-icon> Delete All
+							</button>&nbsp;
+							<button mat-raised-button (click)="fetchProducts()" matTooltip="Fetch selected products">
+								<mat-icon>clear_all</mat-icon> Fetch Selected Records
+							</button>&nbsp;
+							<button mat-raised-button (click)="updateStatusForProducts()" matTooltip="Update status for selected products">
+								<mat-icon>update</mat-icon> Update status
+							</button>
+						</div>
+                        -->
+					</div>
+				</div>
+			</div>
+			<!-- end::GROUP ACTIONS -->
+		</div>
+		<!-- end::FILTERS & GROUP ACTIONS -->
+
+		<!-- MATERIAL TABLE | Binded to datasources -->
+		<!-- See off.documentations 'https://material.angular.io/components/table/overview' -->
+		<div class="mat-table__wrapper">
+			<!-- Checkbox Column -->
+			<!-- Table with selection -->
+			<!-- https://run.stackblitz.com/api/angular/v1?file=app%2Ftable-selection-example.ts -->
+			<mat-table class="lmat-elevation-z8" [dataSource]="dataSource" matSort matSortActive="id" matSortDirection="asc" matSortDisableClear>
+				
+
+				<ng-container matColumnDef="id">
+					<mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-vinCode">ID</mat-header-cell>
+					<mat-cell *matCellDef="let operacion" class="mat-column-vinCode">{{operacion.id}}</mat-cell>
+				</ng-container>
+
+				<ng-container matColumnDef="nombre">
+					<mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
+					<mat-cell *matCellDef="let operacion">{{operacion.nombre}}</mat-cell>
+				</ng-container>
+
+				<ng-container matColumnDef="estado">
+					<mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
+					<mat-cell *matCellDef="let operacion">{{operacion.estado}}</mat-cell>
+				</ng-container>
+	
+			
+				<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+				<mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+			</mat-table>
+
+		</div>
+
+		<!-- start: BOTTOM -->
+		<div class="mat-table__bottom">
+			<mat-spinner [diameter]="20" *ngIf="dataSource.loading$ | async"></mat-spinner>
+			<mat-paginator [pageSize]="10" [pageSizeOptions]="[3, 5, 10]" [length]="dataSource.paginatorTotal$ | async" [showFirstLastButtons]="true"></mat-paginator>
+		</div>
+		<!-- end: BOTTOM -->
+	</ng-container>
+	<!-- end::Body -->
+</m-portlet>

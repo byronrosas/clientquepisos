@@ -1,0 +1,68 @@
+<m-portlet [options]="{headLarge: true, enableSticky: true}" [loading$]="loading$">
+
+	<ng-container mPortletHeadTitle>
+		<div class="m-portlet__head-title">
+			<h3 class="m-portlet__head-text">
+				{{ getComponentTitle() }}
+			</h3>
+		</div>
+	</ng-container>
+	<ng-container mPortletHeadTools>
+		<button type="button" (click)="goBack()" mat-raised-button matTooltip="Volver a la lista de operaciones">Atrás</button>&nbsp;
+		<button mat-raised-button (click)="reset()" [disabled]="selectedTab !== 0" matTooltip="Resetear Cambios">Resetear</button>&nbsp;
+
+		<div class="m-buttons--wrapper">
+			<button type="button" (click)="onSumbit(false)" mat-raised-button color="primary" matTooltip="Guardar y Continuar">Guardar</button>
+			<button mat-icon-button [matMenuTriggerFor]="menu" color="primary" >
+				<mat-icon>more_vert</mat-icon>
+			</button>
+			<mat-menu #menu="matMenu">
+				<button mat-menu-item color="primary" (click)="onSumbit(true)">Save & Exit</button>
+				<button mat-menu-item color="primary">Save & Duplicate</button>
+				<button mat-menu-item color="primary" (click)="onSumbit(false)">Save & Continue</button>
+			</mat-menu>
+		</div>
+	</ng-container>
+	<ng-container mPortletBody>
+		<mat-tab-group *ngIf="operacion">
+			<mat-tab label="Información Básica">
+				<ng-template matTabContent>
+					<!--begin::Form-->
+					<form [formGroup]="operacionForm" class="m-form m-form--group-seperator-dashed">
+
+						<div class="m-form__section m-form__section--first">
+							<div class="m-form__group">
+								<div class="row">
+
+									<div class="col-md-4 m--margin-bottom-10-mobile">
+										<mat-form-field class="mat-form-field-fluid">
+											<input matInput placeholder="Ingrese Nombre" formControlName="nombre">
+											<mat-error>
+												El nombre es 
+												<strong>requerido</strong>
+											</mat-error>
+											<mat-hint align="start">Ingrese el
+												<strong>Nombre</strong>
+											</mat-hint>
+										</mat-form-field>
+									</div>									
+								</div>
+							</div>
+
+						</div>
+					</form>
+					<!--end::Form-->
+				</ng-template>
+			</mat-tab>
+			<!--
+
+			<mat-tab label="Product specifications" [disabled]="!operacion.idOperacion">
+				<ng-template matTabContent>
+					<m-specifications-list [specsListState]="specsListState" [(loadingSubject)]="loadingSubject"></m-specifications-list>
+				</ng-template>
+			</mat-tab>
+      -->
+		</mat-tab-group>
+    
+	</ng-container>
+</m-portlet>
